@@ -12,8 +12,9 @@ const COLORS = {
     intern_message : '#dcf8c6'
 }
 
-const FONT = {
-    
+const FONT_TEXT = {
+    'font-family': '"Inter", sans-serif',
+    'font-weight': '400'
 }
 
 const STRINGS = {
@@ -29,11 +30,18 @@ const SIDEBAR = createHtmlElement('div', document.body)
     const PROFILE = createHtmlElement('div', SIDEBAR)
         const PROFILE_PHOTO  = createHtmlElement('img', PROFILE)
             objectToAttr(PROFILE_PHOTO, {src : './assets/photos/avatar.jpg'})
-        const USER = createHtmlElement('span', PROFILE, STRINGS.username)
+        const USERNAME = createHtmlElement('span', PROFILE, STRINGS.username)
 
 const CHAT = createHtmlElement('div', document.body)
     const MESSAGES = createHtmlElement('div', CHAT)
     const INPUT_BOX = createHtmlElement('div', CHAT)
+        const TEXT_AREA = createHtmlElement('textarea', INPUT_BOX)
+        const SEND_BUTTON = createHtmlElement('button', INPUT_BOX)
+            const SEND_ICON_BUTTON = createHtmlElement('i', SEND_BUTTON)
+                objectToAttr(SEND_ICON_BUTTON, {
+                    class : 'fa-solid fa-paper-plane fa-rotate-by',
+                    style : `color: ${COLORS.white}; font-size: 1.2rem ; --fa-rotate-by: 20deg;`
+                })
 
 // ============
 // = STYLES 
@@ -76,6 +84,15 @@ PROFILE.style = objectToStyle(
     }
 )
 
+USERNAME.style = objectToStyle(
+    {
+        ...FONT_TEXT,
+        'font-size' : '1.3rem',
+        color : COLORS.on_primary,
+        'margin-left' : '2ch'
+    }
+)
+
 PROFILE_PHOTO.style = objectToStyle(
     {
         height : '100%',
@@ -100,7 +117,35 @@ MESSAGES.style = objectToStyle(
 INPUT_BOX.style = objectToStyle(
     {
         'background-color':  COLORS.white,
+        padding: '2ch 3ch',
         'grid-row':  '2',
+        display: 'flex',
+        'align-items': 'center'
     }
 )
 
+TEXT_AREA.style = objectToStyle(
+    {
+        'background-color': COLORS.white_dark,
+        border : 'none',
+        outline: 'none',
+        resize: 'none',
+        'border-radius': '1ch',
+        'padding': '1ch 2ch', 
+        width: '100%',
+        ...FONT_TEXT
+    }
+)
+
+SEND_BUTTON.style = objectToStyle(
+    {
+        'background-color': COLORS.primary,
+        border : 'none',
+        outline: 'none',
+        'border-radius': '50%',
+        cursor : 'pointer',
+        width : '6ch',
+        height : '6ch',
+        'margin-left' : '3ch'
+    }
+)
