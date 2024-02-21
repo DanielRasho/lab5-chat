@@ -1,25 +1,6 @@
-import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './DOMHelpers.js'
+import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './model/DOMHelpers.js'
+import { COLORS, FONT_TEXT, STRINGS } from './StyleConstants.js'
 
-const COLORS = {
-    background : '#ece5dd',
-    white : '#ffffff',
-    white_dark : '#e1e6e2',
-    on_background : '#000000',
-    primary : '#128c7e',
-    primary_dark : '#075E54',
-    on_primary : '#ffffff',
-    extern_message : '#ffffff',
-    intern_message : '#dcf8c6'
-}
-
-const FONT_TEXT = {
-    'font-family': '"Inter", sans-serif',
-    'font-weight': '400'
-}
-
-const STRINGS = {
-    username : 'Smaugthur'
-}
 
 // ============
 // =   HTML
@@ -36,6 +17,7 @@ const CHAT = createHtmlElement('div', document.body)
     const MESSAGES = createHtmlElement('div', CHAT)
     const INPUT_BOX = createHtmlElement('div', CHAT)
         const TEXT_AREA = createHtmlElement('textarea', INPUT_BOX)
+            objectToAttr(TEXT_AREA, {placeholder: STRINGS.chat_placeholder})
         const SEND_BUTTON = createHtmlElement('button', INPUT_BOX)
             const SEND_ICON_BUTTON = createHtmlElement('i', SEND_BUTTON)
                 objectToAttr(SEND_ICON_BUTTON, {
