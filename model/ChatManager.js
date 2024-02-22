@@ -39,7 +39,7 @@ export class ChatManager {
     constructMessages (params) {
         let messages = []
         params.forEach(element => {
-            messages.push (new Message( element.id, element.userid, element.body))
+            messages.push (new Message( element.id, element.userId, element.body))
         });
         return messages
     }

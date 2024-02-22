@@ -2,6 +2,9 @@ import { COLORS, FONT_TEXT, IMPORTANT_TEXT} from '../StyleConstants.js'
 import { ChatManager } from './ChatManager.js'
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './DOMHelpers.js'
 
+/**
+ * A class for controling and updatading the UI
+ */
 export class ChatUI{
 
     /**
@@ -13,8 +16,10 @@ export class ChatUI{
      * @param {HTMLElement} SendButton 
      * @param {ChatManager} ChatManager 
      */
-    constructor(timeout, contactsContainer, messagesContainer, TextArea, SendButton, ChatManager){
+    constructor(timeout, username, contactsContainer, messagesContainer, TextArea, SendButton, ChatManager){
         this.timeout = timeout
+        this.username = username
+        this.refreshIntervalID = undefined
         this.contactsContainer = contactsContainer
         this.messagesContainer = messagesContainer
         this.TextArea = TextArea
@@ -22,21 +27,30 @@ export class ChatUI{
         this.ChatManager = ChatManager
     }
 
+    /**
+     * Let class start to check every given timeout if there is new data on server 
+     * and update de DOM
+     */
     start (){
-        this.ChatManager.refresh()
-        setTimeout(()=>{ 
+        this.refreshIntervalID = setInterval(()=> {
             this.refreshUI()
-        }
-            , 2000)
+        }, this.timeout)
     }
 
-    refreshUI(){
+    /**
+     * Resets Containers in the DOM and append new fresh data from server.
+     */
+    async refreshUI(){
+        await this.ChatManager.refresh()
         this.contactsContainer.innerHTML = ''
         this.messagesContainer.innerHTML = ''
-        this.ChatManager.refresh()
         this.insertContact()
+        this.insertMessage()
     }
     
+    /**
+     * Check for all contacts in Chat Manager and inserts them into the DOM.
+     */
     insertContact(){
         // console.log(this.ChatManager.contacts)
         this.ChatManager.contacts.forEach(contactName => {
@@ -74,8 +88,39 @@ export class ChatUI{
         });
     }
     
+    /**
+     * Check for all messages in Chat Manager and inserts them into the DOM.
+     */
     insertMessage(){
+        this.ChatManager.messages.forEach(msg => {
+            
+            let message_container = createHtmlElement('div', this.messagesContainer)
+            message_container.style = objectToStyle({
+                    width: '100%'
+            })
 
+            let message = createHtmlElement('div', message_container) 
+            message.style = objectToStyle({
+                'box-sizing': 'border-box',
+                'background-color': msg.author === this.username ? COLORS.intern_message : COLORS.extern_message,
+                'margin-left': msg.author === this.username ? 'auto' : '0',
+                'margin-bottom' : '3ch',
+                color : COLORS.on_background,
+
+                width : '40vw',
+                padding : '2ch',
+
+                'border-radius' : '0.5ch',
+            })
+            let message_author = createHtmlElement('div', message, msg.author === this.username ? '' : msg.author)
+                message_author.style = objectToStyle({
+                    ...IMPORTANT_TEXT
+                })
+            let message_text = createHtmlElement('div', message, msg.text)
+                message_text.style = objectToStyle({
+                    ...FONT_TEXT
+                })
+        })
     }
 
 }
