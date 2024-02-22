@@ -1,9 +1,8 @@
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './model/DOMHelpers.js'
 import { COLORS, FONT_TEXT, STRINGS } from './StyleConstants.js'
-import { Chat } from './model/Chat.js'
+import { ChatManager } from './model/ChatManager.js'
+import { ChatUI } from './model/ChatUI.js'
 
-const AppChat = new Chat()
-AppChat.refresh()
 
 // ============
 // =   HTML
@@ -52,13 +51,16 @@ SIDEBAR.style = objectToStyle(
         display : 'grid',
         'grid-template-columns': '1fr',
         'grid-template-rows': '1fr 10ch',
-        overflow : 'scroll'
     }
 )
 
 CONTACTS.style = objectToStyle(
     {
         'grid-row':  '1',
+        height: '85vh',
+        padding : '2ch',
+        overflow: 'scroll'
+        
     }
 )
 
@@ -168,3 +170,8 @@ SEND_BUTTON.style = objectToStyle(
         'margin-left' : '3ch'
     }
 )
+
+const AppChatManager = new ChatManager()
+const AppChatUI = new ChatUI(3000, CONTACTS, MESSAGES, TEXT_AREA, SEND_BUTTON, AppChatManager)
+
+AppChatUI.start()

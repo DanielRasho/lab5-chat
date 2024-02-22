@@ -1,7 +1,7 @@
 /**
  * Representation of a Chat that contain Contacts
  */
-export class Chat {
+export class ChatManager {
     /**
      * @param {Array.<Contact>} contacts Array of Contact objects.
      */
@@ -9,7 +9,7 @@ export class Chat {
         this.contacts = []
         this.messages = []    
     }
-    
+
     async refresh(){
         let response = await fetch("https://jsonplaceholder.typicode.com/posts", 
         {
@@ -17,19 +17,19 @@ export class Chat {
             headers: {'Content-Type': 'application/json'}
         })
         const messages = await response.json()
-        console.log(messages)
+        // console.log(messages)
 
-        this.contacts = this.getContacts(messages)
+        this.contacts = this.fetchContacts(messages)
         this.messages = this.constructMessages(messages)
-        console.log(this.contacts)
-        console.log(this.messages)
+        //console.log(this.contacts)
+        //console.log(this.messages)
     }
-
+    
     /**
      * 
      * @param {Array} params 
      */
-    getContacts (params) {
+    fetchContacts (params) {
         // Fetching al messages user and then just getting the unique names.
         return params
             .map( message => message.userId)
@@ -42,6 +42,10 @@ export class Chat {
             messages.push (new Message( element.id, element.userid, element.body))
         });
         return messages
+    }
+
+    sendMessage (){
+
     }
 }
 

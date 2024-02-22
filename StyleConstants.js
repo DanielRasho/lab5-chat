@@ -16,6 +16,11 @@ export const FONT_TEXT = {
     'font-weight': '400'
 }
 
+export const IMPORTANT_TEXT = {
+    'font-family': '"Inter", sans-serif',
+    'font-weight': '700'
+}
+
 export const STRINGS = {
     username : 'Smaugthur',
     groupname: 'Class Chat',
