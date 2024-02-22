@@ -10,6 +10,9 @@ export class ChatManager {
         this.messages = []    
     }
 
+    /**
+     * Calls the API for fetching new messages and contacts
+     */
     async refresh(){
         let response = await fetch("https://jsonplaceholder.typicode.com/posts", 
         {
@@ -19,24 +22,29 @@ export class ChatManager {
         const messages = await response.json()
         // console.log(messages)
 
-        this.contacts = this.fetchContacts(messages)
-        this.messages = this.constructMessages(messages)
+        this.contacts = this.updateContacts(messages)
+        this.messages = this.updateMessages(messages)
         //console.log(this.contacts)
         //console.log(this.messages)
     }
     
     /**
-     * 
-     * @param {Array} params 
+     * Retrieves all unique users participating in the chat.
+     * @param {Array} params API data Object
      */
-    fetchContacts (params) {
+    updateContacts (params) {
         // Fetching al messages user and then just getting the unique names.
         return params
             .map( message => message.userId)
             .filter( (contactName, i, self) => { return i == self.indexOf(contactName)})
     }
 
-    constructMessages (params) {
+    /**
+     * Retrieves all messages in a chat. 
+     * @param {Array} params API data object
+     * @returns 
+     */
+    updateMessages (params) {
         let messages = []
         params.forEach(element => {
             messages.push (new Message( element.id, element.userId, element.body))
