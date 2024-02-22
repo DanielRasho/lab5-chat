@@ -40,17 +40,37 @@ export class ChatUI{
     insertContact(){
         // console.log(this.ChatManager.contacts)
         this.ChatManager.contacts.forEach(contactName => {
-            let contact = createHtmlElement('div', this.contactsContainer, contactName) 
+            let contact = createHtmlElement('div', this.contactsContainer) 
             contact.style = objectToStyle({
                 'background-color': COLORS.primary_dark,
                 'box-sizing': 'border-box',
                 color : COLORS.on_primary,
-                ...IMPORTANT_TEXT,
                 width : '100%',
+                height: '7ch',
                 padding : '2ch',
                 'margin-bottom' : '3ch',
-                'border-radius' : '1ch'
+                'border-radius' : '1ch',
+                display: 'flex',
+                'justify-items': 'center',
             })
+
+            let profile_photo = createHtmlElement('img', contact)
+                objectToAttr(profile_photo, {src: '../assets/photos/avatar.jpg'})
+                profile_photo.style = objectToStyle(
+                    {
+                        height: '100%', 
+                        'border-radius': '50%',
+                        'margin-right' : '2ch'
+                    }
+                )
+
+            let profile_text = createHtmlElement('span', contact, contactName)
+                profile_text.style = objectToStyle(
+                    {
+                        color: COLORS.on_primary,
+                        ...IMPORTANT_TEXT,
+                    }
+                )
         });
     }
     
