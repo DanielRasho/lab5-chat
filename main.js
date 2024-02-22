@@ -23,7 +23,7 @@ const CHAT = createHtmlElement('div', document.body)
     const MESSAGES = createHtmlElement('div', CHAT)
     const INPUT_BOX = createHtmlElement('div', CHAT)
         const TEXT_AREA = createHtmlElement('textarea', INPUT_BOX)
-            objectToAttr(TEXT_AREA, {placeholder: STRINGS.chat_placeholder})
+            objectToAttr(TEXT_AREA, {placeholder: STRINGS.chat_placeholder, maxlength:'140'})
         const SEND_BUTTON = createHtmlElement('button', INPUT_BOX)
             const SEND_ICON_BUTTON = createHtmlElement('i', SEND_BUTTON)
                 objectToAttr(SEND_ICON_BUTTON, {
