@@ -69,7 +69,7 @@ export class ChatUI{
             })
 
             let profile_photo = createHtmlElement('img', contact)
-                objectToAttr(profile_photo, {src: '../assets/photos/avatar.jpg'})
+                objectToAttr(profile_photo, {src: './assets/photos/avatar.jpg'})
                 profile_photo.style = objectToStyle(
                     {
                         height: '100%', 
