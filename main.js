@@ -1,6 +1,9 @@
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './model/DOMHelpers.js'
 import { COLORS, FONT_TEXT, STRINGS } from './StyleConstants.js'
+import { Chat } from './model/Chat.js'
 
+const AppChat = new Chat()
+AppChat.refresh()
 
 // ============
 // =   HTML
@@ -14,6 +17,10 @@ const SIDEBAR = createHtmlElement('div', document.body)
         const USERNAME = createHtmlElement('span', PROFILE, STRINGS.username)
 
 const CHAT = createHtmlElement('div', document.body)
+    const CONTACT = createHtmlElement('div', CHAT)
+        const CONTACT_PHOTO  = createHtmlElement('img', CONTACT)
+            objectToAttr(CONTACT_PHOTO, {src : './assets/photos/avatar.jpg'})
+        const CONTACT_NAME = createHtmlElement('span', CONTACT, STRINGS.groupname)
     const MESSAGES = createHtmlElement('div', CHAT)
     const INPUT_BOX = createHtmlElement('div', CHAT)
         const TEXT_AREA = createHtmlElement('textarea', INPUT_BOX)
@@ -86,13 +93,42 @@ CHAT.style = objectToStyle(
     { 
         display : 'grid',
         'grid-template-columns': '1fr',
-        'grid-template-rows': '1fr 10ch',
+        'grid-template-rows': '10ch 1fr 10ch',
     }
 )
 
-MESSAGES.style = objectToStyle(
+CONTACT.style = objectToStyle(
     {
         'grid-row':  '1',
+        'background-color':  COLORS.primary,
+        padding: '2ch 3ch',
+        overflow: 'hidden',
+        display: 'flex',
+        'align-items' : 'center'
+    }
+)
+
+CONTACT_PHOTO.style = objectToStyle(
+    {
+        height : '100%',
+        'border-radius': '50%'
+    }
+
+)
+
+CONTACT_NAME.style = objectToStyle (
+    {
+        ...FONT_TEXT,
+        'font-size' : '1.3rem',
+        color : COLORS.on_primary,
+        'margin-left' : '2ch'
+    }
+)
+
+
+MESSAGES.style = objectToStyle(
+    {
+        'grid-row':  '2',
     }
 )    
 
@@ -100,7 +136,7 @@ INPUT_BOX.style = objectToStyle(
     {
         'background-color':  COLORS.white,
         padding: '2ch 3ch',
-        'grid-row':  '2',
+        'grid-row':  '3',
         display: 'flex',
         'align-items': 'center'
     }
@@ -126,6 +162,7 @@ SEND_BUTTON.style = objectToStyle(
         outline: 'none',
         'border-radius': '50%',
         cursor : 'pointer',
+        'flex-shrink' : '0',
         width : '6ch',
         height : '6ch',
         'margin-left' : '3ch'

@@ -18,5 +18,6 @@ export const FONT_TEXT = {
 
 export const STRINGS = {
     username : 'Smaugthur',
+    groupname: 'Class Chat',
     chat_placeholder: 'Type here...'
 }
