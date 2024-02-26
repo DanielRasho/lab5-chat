@@ -14,7 +14,7 @@ export class ChatManager {
      * Calls the API for fetching new messages and contacts
      */
     async refresh(){
-        let response = await fetch("https://jsonplaceholder.typicode.com/posts", 
+        let response = await fetch("http://uwu-guate.site:3000/messages", 
         {
             method: 'GET',
             headers: {'Content-Type': 'application/json'}
@@ -35,7 +35,7 @@ export class ChatManager {
     updateContacts (params) {
         // Fetching al messages user and then just getting the unique names.
         return params
-            .map( message => message.userId)
+            .map( message => message[1])
             .filter( (contactName, i, self) => { return i == self.indexOf(contactName)})
     }
 
@@ -47,13 +47,20 @@ export class ChatManager {
     updateMessages (params) {
         let messages = []
         params.forEach(element => {
-            messages.push (new Message( element.id, element.userId, element.body))
+            messages.unshift (new Message( element[0], element[1], element[2]))
         });
         return messages
     }
 
-    sendMessage (){
-
+    async sendMessage (username, message){
+        fetch("http://uwu-guate.site:3000/messages", {
+            method: 'POST',
+            body: JSON.stringify({
+                'username': username,
+                'message': message
+            }),
+            headers: { "Content-type" : "application/json; chartset=UTF-8" }
+        })
     }
 }
 

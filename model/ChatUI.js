@@ -32,9 +32,11 @@ export class ChatUI{
      * and update de DOM
      */
     start (){
-        this.refreshIntervalID = setInterval(()=> {
-            this.refreshUI()
-        }, this.timeout)
+//        this.refreshIntervalID = setInterval(()=> {
+//            this.refreshUI()
+//            console.log("Hellow world");
+//1        }, this.timeout)
+        this.refreshUI()
     }
 
     /**
@@ -96,7 +98,9 @@ export class ChatUI{
             
             let message_container = createHtmlElement('div', this.messagesContainer)
             message_container.style = objectToStyle({
-                    width: '100%'
+                    width: '100%',
+                    overflow: 'hidden',
+                    height: 'auto',
             })
 
             let message = createHtmlElement('div', message_container) 
@@ -109,18 +113,25 @@ export class ChatUI{
 
                 width : '40vw',
                 padding : '2ch',
+                height: 'auto',
 
                 'border-radius' : '0.5ch',
             })
             let message_author = createHtmlElement('div', message, msg.author === this.username ? '' : msg.author)
                 message_author.style = objectToStyle({
-                    ...IMPORTANT_TEXT
+                    ...IMPORTANT_TEXT,
                 })
             let message_text = createHtmlElement('div', message, msg.text)
                 message_text.style = objectToStyle({
-                    ...FONT_TEXT
+                    ...FONT_TEXT,
+                    with : '100%',
+                    'word-break': 'break-all'
                 })
         })
+    }
+    
+    sendMessage(){
+        
     }
 
 }
