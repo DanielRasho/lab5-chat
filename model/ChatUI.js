@@ -1,5 +1,5 @@
 import { COLORS, FONT_TEXT, IMPORTANT_TEXT} from '../StyleConstants.js'
-import { ChatManager } from './ChatManager.js'
+import { ChatManager, EMBED_TYPES, EmbedContent } from './ChatManager.js'
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './DOMHelpers.js'
 
 /**
@@ -97,13 +97,18 @@ export class ChatUI{
         this.ChatManager.messages.forEach(msg => {
             
             let message_container = createHtmlElement('div', this.messagesContainer)
+                let message = createHtmlElement('div', message_container) 
+                    let message_author = createHtmlElement('div', message, msg.author === this.username ? '' : msg.author)
+                    let message_text = createHtmlElement('div', message, msg.text)
+                    let embed_content = createHtmlElement('div', message, '')
+            this.appendEmbedContent(embed_content, msg.embeds)
+
             message_container.style = objectToStyle({
                     width: '100%',
                     overflow: 'hidden',
                     height: 'auto',
             })
 
-            let message = createHtmlElement('div', message_container) 
             message.style = objectToStyle({
                 'box-sizing': 'border-box',
                 'background-color': msg.author === this.username ? COLORS.intern_message : COLORS.extern_message,
@@ -117,17 +122,41 @@ export class ChatUI{
 
                 'border-radius' : '0.5ch',
             })
-            let message_author = createHtmlElement('div', message, msg.author === this.username ? '' : msg.author)
-                message_author.style = objectToStyle({
-                    ...IMPORTANT_TEXT,
-                })
-            let message_text = createHtmlElement('div', message, msg.text)
-                message_text.style = objectToStyle({
-                    ...FONT_TEXT,
-                    with : '100%',
-                    'word-break': 'break-all'
-                })
+            message_author.style = objectToStyle({
+                ...IMPORTANT_TEXT,
+            })
+
+            message_text.style = objectToStyle({
+                ...FONT_TEXT,
+                with : '100%',
+                'word-break': 'break-word'
+            })
+            
         })
+    }
+   
+    /**
+     * 
+     * @param {HTMLElement} parent 
+     * @param {Array.<EmbedContent>} embed 
+     */
+    appendEmbedContent(parent, embeds){
+        embeds.forEach(embed => {
+            let embedElement
+            if(embed.type == EMBED_TYPES.IMG){
+                embedElement = createHtmlElement('img', parent)
+                objectToAttr(embedElement, {src : embed.url})
+                embedElement.style = objectToStyle({
+                    width: "100%", 
+                    'margin': '2ch 0'})
+            }
+            else if(embed.type == EMBED_TYPES.YT_VIDEO){
+
+            }
+            else{
+                
+            }
+       }); 
     }
     
     sendMessage(){
