@@ -8,23 +8,28 @@ export class ChatManager {
     constructor(){
         this.contacts = []
         this.messages = []    
+        this.LINK_PREVIEW_KEY = '390ed3399463b57cc25616015bccf600'
     }
 
     /**
      * Calls the API for fetching new messages and contacts
      */
     async refresh(){
-        let response = await fetch("https://apiweb.programmerscrew.com/public/messages", 
+        console.log("owo");
+        
+        let response = await fetch("http://uwu-guate.site:3000/messages", 
         {
             method: 'GET',
             headers: {'Content-Type': 'application/json'}
         })
+        console.log("owo");
         const messagesObject = await response.json()
-        const messages = messagesObject.data
-        //console.log(messages)
+        const messages = messagesObject
 
         this.contacts = this.updateContacts(messages)
-        this.messages = this.updateMessages(messages)
+        this.messages = await this.updateMessages(messages)
+        
+        //this.sendMessage('Smaugthur', 'Subiendo un URL https://www.youtube.com/watch?v=rbRSYYPSjWc')
     }
     
     /**
@@ -43,44 +48,66 @@ export class ChatManager {
      * @param {Array} params API data object
      * @returns 
      */
-    updateMessages (params) {
+    async updateMessages (params) {
 
         let messages = []
-        params.forEach(element => {
-            messages.unshift (new Message( 
-                element.id, 
-                element.username, 
-                element.message,
-                this.getEmbedContent(element.message)
+        for (const message of params) {
+            messages.push( new Message( 
+                    message.id, 
+                    message.username, 
+                    message.content,
+                    await this.getEmbedContent(message.content)
                 )
             )
-        });
+        }
         return messages
     }
 
-    getEmbedContent (message) {
+    async getEmbedContent (message) {
         const urlRegex = new RegExp(/(http|https|ftp):[\w?\/\.=\%_\-\?\&]+/, 'g');
         const isImage = (url) => /\.(jpg|jpeg|png|webp|avif|gif|svg)[\?\w=\w\.]*$/.test(url);
-        const isYTVideo = (url) => url.includes("www.youtube.com")
         
         // matchAll return an array of mathing elements, picking the first one since 
         // the last is trivial
         let urlsFoundInMessage = [...message.matchAll(urlRegex)].map(m => m[0])
 
-        return urlsFoundInMessage.map( url => {
-            let type
-            if(isImage(url)) 
-                type = EMBED_TYPES.IMG
-            else if (isYTVideo(url))
-                type = EMBED_TYPES.YT_VIDEO
-            else 
-                type = EMBED_TYPES.URL
-            return new EmbedContent(type, url)
-        })
+        let embedContents = [];
+        for (const url of urlsFoundInMessage) {
+            let type;
+            if (isImage(url)) {
+                type = EMBED_TYPES.IMG;
+                embedContents.push(new EmbedContent(type, url));
+            } else {
+                type = EMBED_TYPES.URL;
+                let urlInfo = await this.fetchOGData(url);
+                embedContents.push(new EmbedContent(
+                    type,
+                    url,
+                    urlInfo.title,
+                    urlInfo.image,
+                    urlInfo.description
+                ));
+            }
+        }
+
+        return embedContents
+    }
+
+    async fetchOGData(siteUrl){
+        const requestURL = `https://api.linkpreview.net/?fields=image_x,icon_type,locale&q=${siteUrl}`
+        // const webPage = await fetch(requestURL, {
+        // method: 'GET',
+        // headers: {
+        //     'Content-Type': 'application/json', 
+        //     'X-Linkpreview-Api-Key': this.LINK_PREVIEW_KEY}
+        // }) 
+        // const urlInfo = await webPage.json()
+        const dummy = '{"title":"Title","description":"Esto es una descripcion","image":"https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxjNzl6a2E4ZWxrczRqazlwOXU3b2JhMWp3emhiajNmN3dqcW1qeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XD16Yi4PaP6s67JSaQ/giphy.gif","url":"youtube.com"}'
+        return JSON.parse(dummy)
     }
 
     async sendMessage (username, message){
-        fetch("https://apiweb.programmerscrew.com/public/messages", {
+        fetch("http://uwu-guate.site:3000/messages", {
             method: 'POST',
             body: JSON.stringify({
                 'username': username,
@@ -113,15 +140,17 @@ export class Message {
  * representation of embed content
  */
 export class EmbedContent {
-    constructor(type, url){
+    constructor(type, url, ogTitle = undefined, ogImage = undefined, ogDescription = undefined){
         this.type = type
         this.url = url
+        this.ogTitle = ogTitle
+        this.ogImage = ogImage
+        this.ogDescription = ogDescription
     }
 }
 
 export const EMBED_TYPES = Object.freeze({
     IMG : 'IMG',
-    YT_VIDEO: 'YT_VIDEO',
     URL : 'URL'
 })
 

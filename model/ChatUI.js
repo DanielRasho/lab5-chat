@@ -1,4 +1,4 @@
-import { COLORS, FONT_TEXT, IMPORTANT_TEXT} from '../StyleConstants.js'
+import { COLORS, FONT_TEXT, IMPORTANT_TEXT, FONT_SECONDARY_TEXT} from '../StyleConstants.js'
 import { ChatManager, EMBED_TYPES, EmbedContent } from './ChatManager.js'
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './DOMHelpers.js'
 
@@ -25,6 +25,7 @@ export class ChatUI{
         this.TextArea = TextArea
         this.SendButton = SendButton,
         this.ChatManager = ChatManager
+        this.SendButton.addEventListener('click', (event)=>{this.sendMessage()})
     }
 
     /**
@@ -150,17 +151,51 @@ export class ChatUI{
                     width: "100%", 
                     'margin': '2ch 0'})
             }
-            else if(embed.type == EMBED_TYPES.YT_VIDEO){
-
-            }
             else{
-                
+                console.log(embed);
+                embedElement = createHtmlElement('a', parent)                
+                    embedElement.style = objectToStyle({
+                        display: 'block',
+                        width: '100%',
+                        'margin' : '2ch 0',
+                        'border-radius' : '1ch',
+                        'background-color': COLORS.deactivate,
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        'text-decoration': 'none'
+                    })
+                    objectToAttr(embedElement, {
+                        href: embed.url,
+                        target: "_blank"
+                    })
+                let thumbnail = createHtmlElement('div', embedElement)
+                    thumbnail.style = objectToStyle({
+                        width: '100%',
+                        height: '20ch',
+                        'background-image': `url(${embed.ogImage})`,
+                        'background-position': 'center'
+                    })
+                objectToAttr(thumbnail, {src : embed.ogImage})
+                let title = createHtmlElement('div', embedElement, embed.ogTitle)
+                let description = createHtmlElement('div', embedElement, embed.ogDescription)
+                let url = createHtmlElement('div', embedElement, embed.url)
+                    title.style = objectToStyle({
+                        ...FONT_SECONDARY_TEXT,
+                        margin: '1ch 0',
+                        'padding-left': '1ch'})
+                    description.style = objectToStyle({
+                        ...FONT_SECONDARY_TEXT,
+                        margin: '1ch 0',
+                        'padding-left': '1ch'})
+                    url.style = objectToStyle({
+                        ...FONT_SECONDARY_TEXT,
+                        margin: '1ch 0',
+                        'padding-left': '1ch'})
             }
        }); 
     }
     
     sendMessage(){
-        
+        console.log(this.TextArea.value);
     }
-
 }

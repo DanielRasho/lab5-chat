@@ -8,12 +8,18 @@ export const COLORS = {
     primary_dark : '#075E54',
     on_primary : '#ffffff',
     extern_message : '#ffffff',
-    intern_message : '#dcf8c6'
+    intern_message : '#dcf8c6',
+    deactivate: '#ebebeb'
 }
 
 export const FONT_TEXT = {
     'font-family': '"Inter", sans-serif',
     'font-weight': '400'
+}
+
+export const FONT_SECONDARY_TEXT= {
+    'font-family': '"Inter", sans-serif',
+    'font-weight': '300'
 }
 
 export const IMPORTANT_TEXT = {
