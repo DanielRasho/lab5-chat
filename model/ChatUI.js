@@ -26,6 +26,9 @@ export class ChatUI{
         this.SendButton = SendButton,
         this.ChatManager = ChatManager
         this.SendButton.addEventListener('click', (event)=>{this.sendMessage()})
+        this.TextArea.addEventListener('keypress', (event)=>{
+            if(event.keyCode == 13) this.sendMessage()
+        })
     }
 
     /**

@@ -30,7 +30,6 @@ export class ChatManager {
         this.contacts = this.updateContacts(messages)
         this.messages = await this.updateMessages(messages)
         
-        //this.sendMessage('Smaugthur', 'Subiendo un URL https://www.youtube.com/watch?v=rbRSYYPSjWc')
     }
     
     /**
