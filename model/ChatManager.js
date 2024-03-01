@@ -16,19 +16,17 @@ export class ChatManager {
      * Calls the API for fetching new messages and contacts
      */
     async refresh(){
-        console.log("owo");
         
         let response = await fetch("http://uwu-guate.site:3000/messages", 
         {
             method: 'GET',
             headers: {'Content-Type': 'application/json'}
         })
-        console.log("owo");
         const messagesObject = await response.json()
         const messages = messagesObject
 
         this.contacts = this.updateContacts(messages)
-        this.messages = await this.updateMessages(messages)
+        this.messages = this.messages.concat(await this.updateMessages(messages))
         
     }
     
@@ -49,9 +47,15 @@ export class ChatManager {
      * @returns 
      */
     async updateMessages (params) {
-        let newMessages = params.filter(message => !this.cacheMessages.includes(message))
+
+        // Getting new messages
+        let newMessages = params.slice(this.cacheMessages.length)
         console.log(newMessages);
 
+
+        this.cacheMessages = this.cacheMessages.concat(newMessages)
+
+        // Rendering new messages
         let messages = []
         for (const message of newMessages) {
             messages.push( new Message( 
@@ -96,16 +100,18 @@ export class ChatManager {
     }
 
     async fetchOGData(siteUrl){
+        console.log("hellow");
         const requestURL = `https://api.linkpreview.net/?fields=image_x,icon_type,locale&q=${siteUrl}`
-        // const webPage = await fetch(requestURL, {
-        // method: 'GET',
-        // headers: {
-        //     'Content-Type': 'application/json', 
-        //     'X-Linkpreview-Api-Key': this.LINK_PREVIEW_KEY}
-        // }) 
-        // const urlInfo = await webPage.json()
-        const dummy = '{"title":"Title","description":"Esto es una descripcion","image":"https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxjNzl6a2E4ZWxrczRqazlwOXU3b2JhMWp3emhiajNmN3dqcW1qeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XD16Yi4PaP6s67JSaQ/giphy.gif","url":"youtube.com"}'
-        return JSON.parse(dummy)
+        const webPage = await fetch(requestURL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json', 
+            'X-Linkpreview-Api-Key': this.LINK_PREVIEW_KEY}
+        }) 
+        const urlInfo = await webPage.json()
+        return urlInfo
+        //const dummy = '{"title":"Title","description":"Esto es una descripcion","image":"https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxjNzl6a2E4ZWxrczRqazlwOXU3b2JhMWp3emhiajNmN3dqcW1qeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XD16Yi4PaP6s67JSaQ/giphy.gif","url":"youtube.com"}'
+        //return JSON.parse(dummy)
     }
 
     async sendMessage (username, message){

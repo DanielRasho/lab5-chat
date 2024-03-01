@@ -38,7 +38,6 @@ export class ChatUI{
     start (){
        this.refreshIntervalID = setInterval(()=> {
            this.refreshUI()
-           console.log("Hellow world");
        }, this.timeout)
     }
 
@@ -112,7 +111,6 @@ export class ChatUI{
                     height: 'auto',
             })
             
-            console.log(msg.author == this.username);
             message.style = objectToStyle({
                 'box-sizing': 'border-box',
                 'background-color': msg.author == this.username ? COLORS.intern_message : COLORS.extern_message,
@@ -155,7 +153,7 @@ export class ChatUI{
                     'margin': '2ch 0'})
             }
             else{
-                console.log(embed);
+                //console.log(embed);
                 embedElement = createHtmlElement('a', parent)                
                     embedElement.style = objectToStyle({
                         display: 'block',
