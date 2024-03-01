@@ -33,11 +33,10 @@ export class ChatUI{
      * and update de DOM
      */
     start (){
-//        this.refreshIntervalID = setInterval(()=> {
-//            this.refreshUI()
-//            console.log("Hellow world");
-//1        }, this.timeout)
-        this.refreshUI()
+       this.refreshIntervalID = setInterval(()=> {
+           this.refreshUI()
+           console.log("Hellow world");
+       }, this.timeout)
     }
 
     /**

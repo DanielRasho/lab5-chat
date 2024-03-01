@@ -8,6 +8,7 @@ export class ChatManager {
     constructor(){
         this.contacts = []
         this.messages = []    
+        this.cacheMessages = []
         this.LINK_PREVIEW_KEY = '390ed3399463b57cc25616015bccf600'
     }
 
@@ -49,9 +50,11 @@ export class ChatManager {
      * @returns 
      */
     async updateMessages (params) {
+        let newMessages = params.filter(message => !this.cacheMessages.includes(message))
+        console.log(newMessages);
 
         let messages = []
-        for (const message of params) {
+        for (const message of newMessages) {
             messages.push( new Message( 
                     message.id, 
                     message.username, 
