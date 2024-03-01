@@ -108,11 +108,12 @@ export class ChatUI{
                     overflow: 'hidden',
                     height: 'auto',
             })
-
+            
+            console.log(msg.author == this.username);
             message.style = objectToStyle({
                 'box-sizing': 'border-box',
-                'background-color': msg.author === this.username ? COLORS.intern_message : COLORS.extern_message,
-                'margin-left': msg.author === this.username ? 'auto' : '0',
+                'background-color': msg.author == this.username ? COLORS.intern_message : COLORS.extern_message,
+                'margin-left': msg.author == this.username ? 'auto' : '0',
                 'margin-bottom' : '3ch',
                 color : COLORS.on_background,
 
@@ -196,7 +197,7 @@ export class ChatUI{
     
     sendMessage(){
         // Fetch Data
-        let author = STRINGS.username
+        let author = this.username
         let message = this.TextArea.value
         // Call API
         this.ChatManager.sendMessage(author, message)

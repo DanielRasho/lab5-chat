@@ -179,7 +179,7 @@ SEND_BUTTON.style = objectToStyle(
 // ============
 
 const AppChatManager = new ChatManager()
-const AppChatUI = new ChatUI(3000, 1 ,CONTACTS, MESSAGES, TEXT_AREA, SEND_BUTTON, AppChatManager)
+const AppChatUI = new ChatUI(3000, STRINGS.username ,CONTACTS, MESSAGES, TEXT_AREA, SEND_BUTTON, AppChatManager)
 
 // Start UI functionalities.
 AppChatUI.start()
