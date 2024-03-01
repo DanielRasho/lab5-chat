@@ -1,4 +1,4 @@
-import { COLORS, FONT_TEXT, IMPORTANT_TEXT, FONT_SECONDARY_TEXT} from '../StyleConstants.js'
+import { COLORS, FONT_TEXT, IMPORTANT_TEXT, FONT_SECONDARY_TEXT, STRINGS} from '../StyleConstants.js'
 import { ChatManager, EMBED_TYPES, EmbedContent } from './ChatManager.js'
 import {objectToStyle, objectToAttr, createHtmlElement, appendHtmlElement} from './DOMHelpers.js'
 
@@ -180,7 +180,7 @@ export class ChatUI{
                 let description = createHtmlElement('div', embedElement, embed.ogDescription)
                 let url = createHtmlElement('div', embedElement, embed.url)
                     title.style = objectToStyle({
-                        ...FONT_SECONDARY_TEXT,
+                        ...IMPORTANT_TEXT,
                         margin: '1ch 0',
                         'padding-left': '1ch'})
                     description.style = objectToStyle({
@@ -196,6 +196,13 @@ export class ChatUI{
     }
     
     sendMessage(){
-        console.log(this.TextArea.value);
+        // Fetch Data
+        let author = STRINGS.username
+        let message = this.TextArea.value
+        // Call API
+        this.ChatManager.sendMessage(author, message)
+        // Reset Stylse
+        this.TextArea.value = ""
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight
     }
 }
